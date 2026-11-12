@@ -1,0 +1,7 @@
+{
+  "https://example.com/robots.txt": {"body": "User-agent: *\nDisallow: /admin/\n"},
+  "https://example.com/": {"file": "root.html", "headers": {"content-type": "text/html; charset=utf-8"}},
+  "https://example.com/en/": {"file": "en.html", "headers": {"content-type": "text/html; charset=utf-8"}},
+  "https://example.com/de/": {"file": "de.html", "headers": {"content-type": "text/html; charset=utf-8"}},
+  "https://example.com/fr/": {"file": "fr.html", "headers": {"content-type": "text/html; charset=utf-8"}}
+}

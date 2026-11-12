@@ -1,0 +1,70 @@
+hreflang audit
+============================================================
+URLs fetched: 15  pages with hreflang: 4  annotations: 19  clusters: 1
+Annotations by source: html=19
+Blocked by robots.txt: 1  not crawled (limit): 0
+Issues: 17 error(s), 7 warning(s), 7 notice(s)
+
+https://shop.test/de/
+  E target-non-200: https://shop.test/en returns 404
+  W cluster-code-conflict: versions disagree on the URL for 'en': https://shop.test/en-us/ (by 1 page); https://shop.test/en/ (by 3 pages)
+  W inconsistent-set: set is missing versions declared elsewhere in the cluster: en-uk=https://shop.test/uk/, fr=https://shop.test/fr/, ja=https://shop.test/ja/, nl=https://shop.test/nl/, pt=https://shop.test/pt/
+  N missing-x-default: no x-default annotation
+
+https://shop.test/en/
+  E duplicate-hreflang [html]: 'en' is declared for 2 different URLs: https://shop.test/en-us/, https://shop.test/en/
+  E known-mistake-region [html]: 'UK' is not an ISO 3166-1 code; use 'GB' (United Kingdom) (suggested: en-GB)
+  E link-outside-head [html]: hreflang='pl' link is outside <head> and will be ignored
+  E missing-return-link: https://shop.test/en-us/ (EN) does not link back to this page
+  E missing-return-link: https://shop.test/de/ (de) does not link back to this page; it links to https://shop.test/en instead (differs only by a trailing slash)
+  E missing-return-link: https://shop.test/uk/ (en-uk) does not link back to this page
+  E missing-return-link: https://shop.test/fr/ (fr) does not link back to this page
+  E missing-return-link: https://shop.test/ja/ (ja) does not link back to this page
+  E protocol-relative-url [html]: href '//shop.test/ja/' has no protocol
+  E relative-url [html]: href '/fr/' is relative (resolves to https://shop.test/fr/)
+  E target-canonical-mismatch: https://shop.test/pt/ declares canonical https://shop.test/en/
+  E target-noindex: https://shop.test/nl/ is noindex
+  E target-non-200: https://shop.test/it/ returns 404
+  E target-redirect: https://shop.test/es-old/ redirects (301) to https://shop.test/es/
+  E target-redirect: http://shop.test/ redirects (301) to https://shop.test/
+  W mixed-protocol: set mixes http and https URLs; http: http://shop.test/
+  W target-blocked: https://shop.test/private/sv/ is disallowed by robots.txt
+  N html-lang-mismatch: https://shop.test/fr/ is annotated as 'fr' but has <html lang="en">
+  N html-lang-mismatch: https://shop.test/ja/ is annotated as 'ja' but has <html lang="en">
+  N non-canonical-case [html]: 'EN' works (values are case-insensitive) but the conventional form is 'en' (suggested: en)
+
+https://shop.test/pt/
+  E page-canonical-conflict: page declares hreflang but its canonical is https://shop.test/en/
+  W inconsistent-set: set is missing versions declared elsewhere in the cluster: de=https://shop.test/de/, en-uk=https://shop.test/uk/, fr=https://shop.test/fr/, ja=https://shop.test/ja/, nl=https://shop.test/nl/
+  N missing-x-default: no x-default annotation
+
+https://shop.test/nl/
+  W inconsistent-set: set is missing versions declared elsewhere in the cluster: de=https://shop.test/de/, en-uk=https://shop.test/uk/, fr=https://shop.test/fr/, ja=https://shop.test/ja/, pt=https://shop.test/pt/
+  W page-noindex: page declares hreflang but is noindex
+  N missing-x-default: no x-default annotation
+
+http://shop.test/robots.txt
+  N robots-unavailable: robots.txt returned 404 (crawling allowed)
+
+Issues by rule
+------------------------------------------------------------
+  missing-return-link        5
+  inconsistent-set           3
+  missing-x-default          3
+  html-lang-mismatch         2
+  target-non-200             2
+  target-redirect            2
+  cluster-code-conflict      1
+  duplicate-hreflang         1
+  known-mistake-region       1
+  link-outside-head          1
+  mixed-protocol             1
+  non-canonical-case         1
+  page-canonical-conflict    1
+  page-noindex               1
+  protocol-relative-url      1
+  relative-url               1
+  robots-unavailable         1
+  target-blocked             1
+  target-canonical-mismatch  1
+  target-noindex             1

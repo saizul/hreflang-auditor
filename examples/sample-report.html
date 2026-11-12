@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>hreflang audit report</title>
+<style>
+:root{--bg:#fff;--fg:#1d2330;--muted:#5f6b7a;--line:#e3e7ee;--ok:#e3f5e8;--okfg:#17643a;
+--warn:#fff3d6;--warnfg:#7a5300;--err:#fde4e4;--errfg:#9b1c1c;--self:#e8eefc;--selffg:#23408e}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--fg:#e6e9ef;--muted:#9aa4b2;--line:#2a303b;
+--ok:#16331f;--okfg:#8fe0a9;--warn:#3a2f12;--warnfg:#ffd27a;--err:#3d1717;--errfg:#ff9c9c;
+--self:#1b2747;--selffg:#a9bdff}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+background:var(--bg);color:var(--fg)}main{max-width:1280px;margin:0 auto;padding:24px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:32px 0 8px}.muted{color:var(--muted)}
+.cards{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}.card{border:1px solid var(--line);
+border-radius:8px;padding:10px 14px;min-width:130px}.card b{display:block;font-size:20px}
+table{border-collapse:collapse;width:100%;margin:8px 0 16px}th,td{border:1px solid var(--line);
+padding:4px 8px;text-align:left;vertical-align:top}th{position:sticky;top:0;background:var(--bg)}
+.matrix td.c{text-align:center;white-space:nowrap;font-size:12px}.wrap{overflow-x:auto}
+.self{background:var(--self);color:var(--selffg)}.ok{background:var(--ok);color:var(--okfg)}
+.unverified{color:var(--muted)}.no-return,.missing,.conflict{background:var(--warn);color:var(--warnfg)}
+.target-problem,.sev-error{background:var(--err);color:var(--errfg)}.sev-warning{background:var(--warn);
+color:var(--warnfg)}.sev-notice{color:var(--muted)}td.url{word-break:break-all;max-width:460px}
+.legend span{display:inline-block;padding:1px 8px;margin:0 6px 4px 0;border-radius:4px;font-size:12px}
+input[type=search]{width:100%;max-width:420px;padding:6px 8px;border:1px solid var(--line);
+border-radius:6px;background:var(--bg);color:var(--fg)}code{font-size:12px}
+</style></head><body><main>
+<h1>hreflang audit report</h1>
+<p class="muted">hreflang-auditor 0.1.0 &middot; 2026-11-12T12:08:23+00:00</p>
+<div class="cards">
+<div class="card"><span class="muted">URLs fetched</span><b>15</b></div>
+<div class="card"><span class="muted">Pages with hreflang</span><b>4</b></div>
+<div class="card"><span class="muted">Annotations</span><b>19</b></div>
+<div class="card"><span class="muted">Clusters</span><b>1</b></div>
+<div class="card"><span class="muted">Errors</span><b>17</b></div>
+<div class="card"><span class="muted">Warnings</span><b>7</b></div>
+<div class="card"><span class="muted">Notices</span><b>7</b></div>
+</div>
+<h2>Language matrix</h2>
+<p class="legend"><span class="self">self</span><span class="ok">ok: reciprocal</span><span class="no-return">no return link</span><span class="target-problem">target problem</span><span class="missing">missing in this set</span><span class="conflict">conflicting URLs</span><span class="unverified">? not crawled</span></p>
+<h3>Cluster 1 <span class="muted">(13 URLs, 11 codes)</span></h3>
+<div class="wrap"><table class="matrix"><thead><tr><th>URL</th><th>Status</th>
+<th title="German">de</th>
+<th title="English">en</th>
+<th title="English (uk)">en-uk</th>
+<th title="Spanish">es</th>
+<th title="French">fr</th>
+<th title="Italian">it</th>
+<th title="Japanese">ja</th>
+<th title="Dutch">nl</th>
+<th title="Portuguese">pt</th>
+<th title="Swedish">sv</th>
+<th title="x-default (fallback)">x-default</th>
+</tr></thead><tbody>
+<tr><td class="url">http://shop.test/</td><td>301</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/de/</td><td>200</td>
+<td class="c self" title="https://shop.test/de/">self</td>
+<td class="c target-problem" title="https://shop.test/en
+https://shop.test/en returns 404">target</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+</tr>
+<tr><td class="url">https://shop.test/en</td><td>404</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/en-us/</td><td>200</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/en/</td><td>200</td>
+<td class="c no-return" title="https://shop.test/de/
+no return link">no return</td>
+<td class="c conflict" title="https://shop.test/en-us/
+https://shop.test/en/
+several URLs for one code">conflict</td>
+<td class="c no-return" title="https://shop.test/uk/
+no return link">no return</td>
+<td class="c target-problem" title="https://shop.test/es-old/
+https://shop.test/es-old/ redirects (301) to https://shop.test/es/">target</td>
+<td class="c no-return" title="https://shop.test/fr/
+no return link">no return</td>
+<td class="c target-problem" title="https://shop.test/it/
+https://shop.test/it/ returns 404">target</td>
+<td class="c no-return" title="https://shop.test/ja/
+no return link">no return</td>
+<td class="c target-problem" title="https://shop.test/nl/
+https://shop.test/nl/ is noindex">target</td>
+<td class="c target-problem" title="https://shop.test/pt/
+https://shop.test/pt/ declares canonical https://shop.test/en/">target</td>
+<td class="c target-problem" title="https://shop.test/private/sv/
+https://shop.test/private/sv/ is disallowed by robots.txt">target</td>
+<td class="c target-problem" title="http://shop.test/
+http://shop.test/ redirects (301) to https://shop.test/">target</td>
+</tr>
+<tr><td class="url">https://shop.test/es-old/</td><td>301</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/fr/</td><td>200</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/it/</td><td>404</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/ja/</td><td>200</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/nl/</td><td>200</td>
+<td class="c missing" title="">missing</td>
+<td class="c ok" title="https://shop.test/en/">ok</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c self" title="https://shop.test/nl/">self</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+</tr>
+<tr><td class="url">https://shop.test/private/sv/</td><td></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+<tr><td class="url">https://shop.test/pt/</td><td>200</td>
+<td class="c missing" title="">missing</td>
+<td class="c ok" title="https://shop.test/en/">ok</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+<td class="c self" title="https://shop.test/pt/">self</td>
+<td class="c missing" title="">missing</td>
+<td class="c missing" title="">missing</td>
+</tr>
+<tr><td class="url">https://shop.test/uk/</td><td>200</td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+<td class="c absent" title=""></td>
+</tr>
+</tbody></table></div>
+<h2>Issues</h2>
+<input id="filter" type="search" placeholder="Filter issues">
+<div class="wrap"><table id="issues"><thead><tr><th>Severity</th><th>Rule</th><th>URL</th><th>hreflang</th><th>Source</th><th>Message</th></tr></thead><tbody>
+<tr><td class="sev-error">error</td><td><code>target-non-200</code></td><td class="url">https://shop.test/de/</td><td>en</td><td></td><td>https://shop.test/en returns 404</td></tr>
+<tr><td class="sev-error">error</td><td><code>duplicate-hreflang</code></td><td class="url">https://shop.test/en/</td><td>en</td><td>html</td><td>&#x27;en&#x27; is declared for 2 different URLs: https://shop.test/en-us/, https://shop.test/en/</td></tr>
+<tr><td class="sev-error">error</td><td><code>known-mistake-region</code></td><td class="url">https://shop.test/en/</td><td>en-uk</td><td>html</td><td>&#x27;UK&#x27; is not an ISO 3166-1 code; use &#x27;GB&#x27; (United Kingdom) (suggested: en-GB)</td></tr>
+<tr><td class="sev-error">error</td><td><code>link-outside-head</code></td><td class="url">https://shop.test/en/</td><td>pl</td><td>html</td><td>hreflang=&#x27;pl&#x27; link is outside &lt;head&gt; and will be ignored</td></tr>
+<tr><td class="sev-error">error</td><td><code>missing-return-link</code></td><td class="url">https://shop.test/en/</td><td>EN</td><td></td><td>https://shop.test/en-us/ (EN) does not link back to this page</td></tr>
+<tr><td class="sev-error">error</td><td><code>missing-return-link</code></td><td class="url">https://shop.test/en/</td><td>de</td><td></td><td>https://shop.test/de/ (de) does not link back to this page; it links to https://shop.test/en instead (differs only by a trailing slash)</td></tr>
+<tr><td class="sev-error">error</td><td><code>missing-return-link</code></td><td class="url">https://shop.test/en/</td><td>en-uk</td><td></td><td>https://shop.test/uk/ (en-uk) does not link back to this page</td></tr>
+<tr><td class="sev-error">error</td><td><code>missing-return-link</code></td><td class="url">https://shop.test/en/</td><td>fr</td><td></td><td>https://shop.test/fr/ (fr) does not link back to this page</td></tr>
+<tr><td class="sev-error">error</td><td><code>missing-return-link</code></td><td class="url">https://shop.test/en/</td><td>ja</td><td></td><td>https://shop.test/ja/ (ja) does not link back to this page</td></tr>
+<tr><td class="sev-error">error</td><td><code>protocol-relative-url</code></td><td class="url">https://shop.test/en/</td><td>ja</td><td>html</td><td>href &#x27;//shop.test/ja/&#x27; has no protocol</td></tr>
+<tr><td class="sev-error">error</td><td><code>relative-url</code></td><td class="url">https://shop.test/en/</td><td>fr</td><td>html</td><td>href &#x27;/fr/&#x27; is relative (resolves to https://shop.test/fr/)</td></tr>
+<tr><td class="sev-error">error</td><td><code>target-canonical-mismatch</code></td><td class="url">https://shop.test/en/</td><td>pt</td><td></td><td>https://shop.test/pt/ declares canonical https://shop.test/en/</td></tr>
+<tr><td class="sev-error">error</td><td><code>target-noindex</code></td><td class="url">https://shop.test/en/</td><td>nl</td><td></td><td>https://shop.test/nl/ is noindex</td></tr>
+<tr><td class="sev-error">error</td><td><code>target-non-200</code></td><td class="url">https://shop.test/en/</td><td>it</td><td></td><td>https://shop.test/it/ returns 404</td></tr>
+<tr><td class="sev-error">error</td><td><code>target-redirect</code></td><td class="url">https://shop.test/en/</td><td>es</td><td></td><td>https://shop.test/es-old/ redirects (301) to https://shop.test/es/</td></tr>
+<tr><td class="sev-error">error</td><td><code>target-redirect</code></td><td class="url">https://shop.test/en/</td><td>x-default</td><td></td><td>http://shop.test/ redirects (301) to https://shop.test/</td></tr>
+<tr><td class="sev-error">error</td><td><code>page-canonical-conflict</code></td><td class="url">https://shop.test/pt/</td><td></td><td></td><td>page declares hreflang but its canonical is https://shop.test/en/</td></tr>
+<tr><td class="sev-warning">warning</td><td><code>cluster-code-conflict</code></td><td class="url">https://shop.test/de/</td><td>en</td><td></td><td>versions disagree on the URL for &#x27;en&#x27;: https://shop.test/en-us/ (by 1 page); https://shop.test/en/ (by 3 pages)</td></tr>
+<tr><td class="sev-warning">warning</td><td><code>inconsistent-set</code></td><td class="url">https://shop.test/de/</td><td></td><td></td><td>set is missing versions declared elsewhere in the cluster: en-uk=https://shop.test/uk/, fr=https://shop.test/fr/, ja=https://shop.test/ja/, nl=https://shop.test/nl/, pt=https://shop.test/pt/</td></tr>
+<tr><td class="sev-warning">warning</td><td><code>mixed-protocol</code></td><td class="url">https://shop.test/en/</td><td></td><td></td><td>set mixes http and https URLs; http: http://shop.test/</td></tr>
+<tr><td class="sev-warning">warning</td><td><code>target-blocked</code></td><td class="url">https://shop.test/en/</td><td>sv</td><td></td><td>https://shop.test/private/sv/ is disallowed by robots.txt</td></tr>
+<tr><td class="sev-warning">warning</td><td><code>inconsistent-set</code></td><td class="url">https://shop.test/nl/</td><td></td><td></td><td>set is missing versions declared elsewhere in the cluster: de=https://shop.test/de/, en-uk=https://shop.test/uk/, fr=https://shop.test/fr/, ja=https://shop.test/ja/, pt=https://shop.test/pt/</td></tr>
+<tr><td class="sev-warning">warning</td><td><code>page-noindex</code></td><td class="url">https://shop.test/nl/</td><td></td><td></td><td>page declares hreflang but is noindex</td></tr>
+<tr><td class="sev-warning">warning</td><td><code>inconsistent-set</code></td><td class="url">https://shop.test/pt/</td><td></td><td></td><td>set is missing versions declared elsewhere in the cluster: de=https://shop.test/de/, en-uk=https://shop.test/uk/, fr=https://shop.test/fr/, ja=https://shop.test/ja/, nl=https://shop.test/nl/</td></tr>
+<tr><td class="sev-notice">notice</td><td><code>robots-unavailable</code></td><td class="url">http://shop.test/robots.txt</td><td></td><td></td><td>robots.txt returned 404 (crawling allowed)</td></tr>
+<tr><td class="sev-notice">notice</td><td><code>missing-x-default</code></td><td class="url">https://shop.test/de/</td><td></td><td></td><td>no x-default annotation</td></tr>
+<tr><td class="sev-notice">notice</td><td><code>html-lang-mismatch</code></td><td class="url">https://shop.test/en/</td><td>fr</td><td></td><td>https://shop.test/fr/ is annotated as &#x27;fr&#x27; but has &lt;html lang=&quot;en&quot;&gt;</td></tr>
+<tr><td class="sev-notice">notice</td><td><code>html-lang-mismatch</code></td><td class="url">https://shop.test/en/</td><td>ja</td><td></td><td>https://shop.test/ja/ is annotated as &#x27;ja&#x27; but has &lt;html lang=&quot;en&quot;&gt;</td></tr>
+<tr><td class="sev-notice">notice</td><td><code>non-canonical-case</code></td><td class="url">https://shop.test/en/</td><td>EN</td><td>html</td><td>&#x27;EN&#x27; works (values are case-insensitive) but the conventional form is &#x27;en&#x27; (suggested: en)</td></tr>
+<tr><td class="sev-notice">notice</td><td><code>missing-x-default</code></td><td class="url">https://shop.test/nl/</td><td></td><td></td><td>no x-default annotation</td></tr>
+<tr><td class="sev-notice">notice</td><td><code>missing-x-default</code></td><td class="url">https://shop.test/pt/</td><td></td><td></td><td>no x-default annotation</td></tr>
+</tbody></table></div>
+<script>
+document.getElementById('filter').addEventListener('input',function(e){
+var q=e.target.value.toLowerCase();document.querySelectorAll('#issues tbody tr').forEach(function(r){
+r.style.display=r.textContent.toLowerCase().indexOf(q)>-1?'':'none';});});
+</script>
+</main></body></html>

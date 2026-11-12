@@ -1,0 +1,27 @@
+{
+  "https://docs.test/robots.txt": {"status": 404},
+  "https://docs.test/guide-en.pdf": {
+    "body": "%PDF-1.4 en",
+    "headers": [
+      ["content-type", "application/pdf"],
+      ["link", "<https://docs.test/guide-en.pdf>; rel=\"alternate\"; hreflang=\"en\", <https://docs.test/guide-de.pdf>; rel=\"alternate\"; hreflang=\"de\""],
+      ["link", "<https://docs.test/guide-en.pdf>; rel=\"alternate\"; hreflang=\"x-default\""]
+    ]
+  },
+  "https://docs.test/guide-de.pdf": {
+    "body": "%PDF-1.4 de",
+    "headers": [
+      ["content-type", "application/pdf"],
+      ["link", "<https://docs.test/guide-en.pdf>; rel=\"alternate\"; hreflang=\"en\", <https://docs.test/guide-de.pdf>; rel=\"alternate\"; hreflang=\"de\", <https://docs.test/guide-en.pdf>; rel=\"alternate\"; hreflang=\"x-default\""]
+    ]
+  },
+  "https://docs.test/page-en": {
+    "file": "page-en.html",
+    "headers": [
+      ["content-type", "text/html"],
+      ["link", "<https://docs.test/page-en>; rel=\"alternate\"; hreflang=\"en\", <https://docs.test/page-fr>; rel=\"alternate\"; hreflang=\"fr\""]
+    ]
+  },
+  "https://docs.test/page-de": {"file": "page-de.html", "headers": {"content-type": "text/html"}},
+  "https://docs.test/page-fr": {"status": 200, "body": "<html><head><title>fr</title></head></html>", "headers": {"content-type": "text/html"}}
+}

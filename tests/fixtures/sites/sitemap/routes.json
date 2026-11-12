@@ -1,0 +1,11 @@
+{
+  "https://intl.test/robots.txt": {"body": "User-agent: *\nAllow: /\n"},
+  "https://intl.test/sitemap_index.xml": {"file": "sitemap_index.xml", "headers": {"content-type": "application/xml"}},
+  "https://intl.test/sitemap-pages.xml.gz": {"file": "sitemap-pages.xml", "gzip": true, "headers": {"content-type": "application/gzip"}},
+  "https://intl.test/sitemap-blog.xml": {"file": "sitemap-blog.xml", "headers": {"content-type": "application/xml"}},
+  "https://intl.test/en/": {"file": "page.html", "headers": {"content-type": "text/html"}},
+  "https://intl.test/bn/": {"file": "page.html", "headers": {"content-type": "text/html"}},
+  "https://intl.test/about-en/": {"file": "page.html", "headers": {"content-type": "text/html"}},
+  "https://intl.test/about-bn/": {"file": "page.html", "headers": {"content-type": "text/html"}},
+  "https://intl.test/blog/": {"file": "page.html", "headers": {"content-type": "text/html"}}
+}

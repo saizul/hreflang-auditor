@@ -1,0 +1,16 @@
+{
+  "https://shop.test/robots.txt": {"body": "User-agent: *\nDisallow: /private/\n"},
+  "https://shop.test/en/": {"file": "en.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/de/": {"file": "de.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/uk/": {"file": "generic.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/fr/": {"file": "generic.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/es-old/": {"status": 301, "headers": {"location": "/es/"}},
+  "https://shop.test/es/": {"file": "generic.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/nl/": {"file": "nl.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/pt/": {"file": "pt.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/ja/": {"file": "generic.html", "headers": {"content-type": "text/html"}},
+  "https://shop.test/en-us/": {"file": "generic.html", "headers": {"content-type": "text/html"}},
+  "http://shop.test/robots.txt": {"status": 404},
+  "http://shop.test/": {"status": 301, "headers": {"location": "https://shop.test/"}},
+  "https://shop.test/": {"file": "generic.html", "headers": {"content-type": "text/html"}}
+}
