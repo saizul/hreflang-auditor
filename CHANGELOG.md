@@ -6,6 +6,27 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Baselines for gradual adoption in CI. `audit --write-baseline PATH` records
+  the issues of a run; `audit --baseline PATH` hides those known issues so only
+  new ones are reported and count for `--fail-on`. Issues are matched by rule,
+  page URL, hreflang value, target and source (not by message), as a multiset.
+  Baseline issues that are gone are reported as fixed, and `--fail-on-fixed`
+  turns them into a failing exit code. A `-f json` report is accepted as a
+  baseline too.
+- Baseline summary in the text, JSON (`baseline` object with `fixed_issues`) and
+  HTML reports. The HTML language matrix still marks known problems.
+- Python API: `Baseline`, `BaselineComparison`, `BaselineError`,
+  `AuditResult.apply_baseline()` and `AuditResult.all_issues`.
+- `CODE_OF_CONDUCT.md`, issue templates (bug report, feature request) and a pull
+  request template.
+
+### Changed
+
+- Python 3.10 or newer is required, matching the versions tested in CI
+  (3.10 to 3.13).
+
 ## [0.1.0] - 2026-11-12
 
 ### Added

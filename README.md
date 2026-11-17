@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/saizul/hreflang-auditor/actions/workflows/ci.yml/badge.svg)](https://github.com/saizul/hreflang-auditor/actions/workflows/ci.yml)
 [![Container image](https://github.com/saizul/hreflang-auditor/actions/workflows/publish-image.yml/badge.svg)](https://github.com/saizul/hreflang-auditor/actions/workflows/publish-image.yml)
-![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)
+![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 Audit `hreflang` annotations the way search engines read them. `hreflang-auditor`
@@ -61,10 +61,13 @@ A full sample is in [`examples/sample-report.txt`](examples/sample-report.txt) a
   colour-coded URL x language matrix per cluster and a filterable issue list.
 - **CI friendly.** `--fail-on` controls the exit code, every rule can be disabled
   or re-levelled, and the package has a Python API.
+- **Baselines.** Record the issues a site already has with `--write-baseline` and
+  pass `--baseline` on later runs: only new issues are reported and fail the
+  build, and issues fixed since the baseline are listed.
 
 ## Installation
 
-Python 3.9 or newer.
+Python 3.10 or newer.
 
 ```console
 $ pip install git+https://github.com/saizul/hreflang-auditor.git
@@ -128,6 +131,60 @@ shows what that URL declares for that value: `self`, `ok` (reciprocal),
 `missing` (other versions declare it, this one does not), `conflict` (several
 URLs for one value) or `?` (target not crawled). Hover a cell for the URL.
 
+### Baselines: only fail on new issues
+
+Large sites rarely start with a clean hreflang setup. A baseline lets you adopt
+the auditor in CI without fixing everything first: record today's issues once,
+commit the file, and from then on only issues that are not in the baseline are
+reported and counted for `--fail-on`.
+
+```console
+$ hreflang-auditor audit -s https://example.com/sitemap.xml --write-baseline hreflang-baseline.json --fail-on never
+$ hreflang-auditor audit -s https://example.com/sitemap.xml --baseline hreflang-baseline.json
+Baseline: 2 new, 41 known (hidden), 3 fixed since the baseline
+```
+
+- An issue is matched by its rule id, page URL, hreflang value, target URL and
+  source. The message text and the severity are not part of the match, so
+  rewording or re-levelling a rule does not break a baseline.
+- Matching counts occurrences: if the baseline holds one issue and the audit now
+  finds the same issue twice, one of them is new.
+- Baseline issues that are no longer found are reported as *fixed* (text and
+  HTML summary, `baseline.fixed_issues` in JSON). Add `--fail-on-fixed` to exit
+  with 1 in that case too, which reminds you to refresh the committed baseline.
+- A JSON report (`-f json`) from an earlier run is accepted as a baseline as well.
+- The HTML language matrix keeps marking known problems; only the issue table
+  and the counts are limited to new issues.
+- `--write-baseline` saves the issues after `--disable`, `--severity` and
+  `--min-severity` are applied. Use the same options on later runs; otherwise
+  issues of a rule you disabled show up as "fixed".
+- Passing both options compares against the old baseline and writes a fresh
+  one with every current issue, which is a convenient way to ratchet.
+
+The baseline file is plain, sorted JSON so changes are easy to review:
+
+```json
+{
+  "kind": "hreflang-auditor-baseline",
+  "format": 1,
+  "tool": "hreflang-auditor",
+  "version": "0.1.0",
+  "created_at": "2026-11-17T09:30:00+00:00",
+  "issues": [
+    {
+      "fingerprint": "5d0c1b9e8f7a6b2c4d3e",
+      "rule": "missing-return-link",
+      "severity": "error",
+      "url": "https://example.com/en/",
+      "hreflang": "de",
+      "target": "https://example.com/de/",
+      "source": "html",
+      "message": "..."
+    }
+  ]
+}
+```
+
 ### Check codes without crawling
 
 ```console
@@ -180,10 +237,14 @@ All options of `hreflang-auditor audit`:
 | `--severity RULE=LEVEL` | | change a rule's level to `error`, `warning` or `notice` |
 | `--min-severity LEVEL` | `notice` | hide lower levels |
 | `--fail-on LEVEL` | `error` | exit 1 if an issue at this level or above exists; `never` always exits 0 |
+| `--baseline PATH` | | hide issues recorded in a baseline or JSON report; only new ones are reported and counted |
+| `--write-baseline PATH` | | save the issues of this run as a baseline file |
+| `--fail-on-fixed` | off | with `--baseline`: also exit 1 when baseline issues are gone |
 | `-q, --quiet` | off | no progress output on stderr |
 
 Exit codes: `0` no blocking issues, `1` issues at or above `--fail-on` (or
-invalid values for `check`), `2` usage errors.
+invalid values for `check`, or fixed baseline issues with `--fail-on-fixed`),
+`2` usage errors (including an unreadable baseline file).
 
 ### Rules
 
@@ -308,6 +369,18 @@ for issue in result.issues:
 open("report.html", "w").write(render(result, "html"))
 ```
 
+To apply a baseline from Python, load it and call `apply_baseline()` on the
+result; `result.issues` then holds only new issues and `result.baseline` the
+comparison:
+
+```python
+from hreflang_auditor import Baseline
+
+result.apply_baseline(Baseline.load("hreflang-baseline.json"))
+print(len(result.baseline.new), len(result.baseline.known), len(result.baseline.fixed))
+Baseline.from_issues(result.all_issues).save("hreflang-baseline.json")  # refresh
+```
+
 `audit()` is the async version. Both accept `transport=` (any
 `httpx.AsyncBaseTransport`), which is how the test suite runs whole sites from
 memory. `hreflang_auditor.parse_hreflang("en-uk")` validates a single value.
@@ -348,7 +421,7 @@ The tests never touch the network. `tests/conftest.py` serves fixture sites from
 | `headers` | `Link` headers on PDFs (several headers, several values) and header/HTML disagreement |
 | `sitemap` | a sitemap index with a gzipped child, a wrong xhtml namespace, a 404 child and a missing self-reference |
 
-CI runs the suite on Python 3.9 to 3.12, lints with ruff, smoke-tests the console
+CI runs the suite on Python 3.10 to 3.13, lints with ruff, smoke-tests the console
 script and installs the built wheel to make sure the code tables are packaged.
 
 ## Limitations
@@ -375,7 +448,8 @@ script and installs the built wheel to make sure the code tables are packaged.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+Security reports: [SECURITY.md](SECURITY.md).
 
 ## License
 

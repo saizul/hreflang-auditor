@@ -15,7 +15,7 @@ def chain_site(n, delay=0.0):
     """Pages p0..pn-1 that each list every page (a full cluster)."""
     urls = [f"https://c.test/p{i}" for i in range(n)]
     alts = [(f"en-{code}", u) for code, u in zip(["GB", "US", "IE", "AU", "CA", "NZ", "ZA", "IN",
-                                                    "SG", "MT", "PH", "NG"], urls)]
+                                                    "SG", "MT", "PH", "NG"], urls, strict=False)]
     routes = {"https://c.test/robots.txt": {"body": ""}}
     for u in urls:
         routes[u] = {"body": html_page(alts), "headers": {"content-type": "text/html"}, "delay": delay}
