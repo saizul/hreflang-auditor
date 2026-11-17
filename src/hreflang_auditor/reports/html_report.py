@@ -93,6 +93,14 @@ def render_html(result: AuditResult) -> str:
         ("Errors", counts["error"]),
         ("Warnings", counts["warning"]),
         ("Notices", counts["notice"]),
+        *(
+            (
+                ("Known (baseline)", len(result.baseline.known)),
+                ("Fixed since baseline", len(result.baseline.fixed)),
+            )
+            if result.baseline is not None
+            else ()
+        ),
     ):
         parts.append(f'<div class="card"><span class="muted">{label}</span><b>{value}</b></div>')
     parts.append("</div>")
@@ -124,8 +132,14 @@ def render_html(result: AuditResult) -> str:
         parts.append("</tbody></table></div>")
 
     parts.append("<h2>Issues</h2>")
+    if result.baseline is not None:
+        parts.append(
+            f'<p class="muted">{len(result.baseline.known)} issue(s) already recorded in the '
+            "baseline are hidden; the matrix still shows them.</p>"
+        )
     if not result.issues:
-        parts.append("<p>No issues found.</p>")
+        empty = "No new issues found." if result.baseline is not None else "No issues found."
+        parts.append(f"<p>{empty}</p>")
     else:
         parts.append('<input id="filter" type="search" placeholder="Filter issues">')
         parts.append(

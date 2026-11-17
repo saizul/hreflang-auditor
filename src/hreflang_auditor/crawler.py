@@ -258,7 +258,7 @@ class Crawler:
                 seen.add(url)
                 batch.append(url)
             responses = await asyncio.gather(*(self._request(u, True) for u in batch))
-            for url, response in zip(batch, responses):
+            for url, response in zip(batch, responses, strict=True):
                 if response.status != 200:
                     reason = response.error or f"HTTP {response.status}"
                     self.result.sitemap_errors.append((url, reason))

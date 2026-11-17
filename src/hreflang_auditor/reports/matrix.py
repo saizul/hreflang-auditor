@@ -72,7 +72,7 @@ def build_matrices(result: AuditResult) -> List[ClusterMatrix]:
 
     problems: Dict[Tuple[str, str], List[str]] = defaultdict(list)
     no_return: Set[Tuple[str, str]] = set()
-    for item in result.issues:
+    for item in result.all_issues:
         if item.target is None:
             continue
         if item.rule in TARGET_RULES:

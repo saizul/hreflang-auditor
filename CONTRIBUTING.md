@@ -17,7 +17,7 @@ think the rule contradicts.
 
 ## Development setup
 
-You need Python 3.9 or newer.
+You need Python 3.10 or newer.
 
 ```console
 $ git clone https://github.com/saizul/hreflang-auditor.git
@@ -64,8 +64,14 @@ update the counts asserted in `tests/test_codes.py`.
 
 - Keep changes focused; one feature or fix per pull request.
 - Tests must not use the network. Use `FixtureSite` from `tests/conftest.py`.
-- Run `pytest` and `ruff check .` before pushing. CI runs both on Python 3.9-3.12.
+- Run `pytest` and `ruff check .` before pushing. CI runs both on Python 3.10-3.13.
 - Add an entry under "Unreleased" in `CHANGELOG.md`.
+
+## Code of conduct
+
+Everyone taking part in this project is expected to follow the
+[code of conduct](CODE_OF_CONDUCT.md). Issue and pull request templates live in
+`.github/`; please fill them in, and never paste credentials or private data.
 
 By contributing you agree that your contribution is licensed under the MIT
 License of this project.

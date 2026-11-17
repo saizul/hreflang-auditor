@@ -80,11 +80,11 @@ def test_matrix_broken_states(broken):
     (matrix,) = build_matrices(broken)
     rows = {r.url: r for r in matrix.rows}
     en = rows["https://shop.test/en/"].cells
-    cols = dict(zip(matrix.columns, en.values()))
+    cols = dict(zip(matrix.columns, en.values(), strict=True))
     assert cols["en"].state == CONFLICT
     assert cols["it"].state == TARGET_PROBLEM
     assert cols["fr"].state == NO_RETURN
-    de = dict(zip(matrix.columns, rows["https://shop.test/de/"].cells.values()))
+    de = dict(zip(matrix.columns, rows["https://shop.test/de/"].cells.values(), strict=True))
     assert de["fr"].state == MISSING
 
 

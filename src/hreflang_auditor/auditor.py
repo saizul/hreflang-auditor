@@ -12,6 +12,7 @@ import httpx
 
 from . import rules as R
 from ._version import __version__
+from .baseline import Baseline, BaselineComparison, compare
 from .checks import Index, build_clusters, check_crawl, run_checks
 from .crawler import CrawlConfig, Crawler, CrawlResult
 from .models import Annotation, Issue, PageInfo, Severity
@@ -41,6 +42,26 @@ class AuditResult:
     finished_at: str = ""
     seeds: List[str] = field(default_factory=list)
     sitemaps: List[str] = field(default_factory=list)
+    baseline: Optional[BaselineComparison] = None
+
+    def apply_baseline(self, baseline: Baseline) -> BaselineComparison:
+        """Hide issues already recorded in ``baseline``; keep only new ones.
+
+        Counts, ``worst()`` and ``has_at_least()`` then only consider new issues.
+        The comparison (known and fixed issues) is stored in ``self.baseline``.
+        Applying a second baseline compares against the issues that are left.
+        """
+        comparison = compare(self.issues, baseline)
+        self.issues = comparison.new
+        self.baseline = comparison
+        return comparison
+
+    @property
+    def all_issues(self) -> List[Issue]:
+        """New issues plus the ones hidden by a baseline, sorted."""
+        if self.baseline is None:
+            return list(self.issues)
+        return sorted(self.issues + self.baseline.known, key=Issue.sort_key)
 
     @property
     def counts(self) -> Dict[str, int]:
@@ -100,6 +121,7 @@ class AuditResult:
             ],
             "clusters": self.clusters,
             "skipped": self.skipped,
+            **({"baseline": self.baseline.to_dict()} if self.baseline is not None else {}),
         }
 
 

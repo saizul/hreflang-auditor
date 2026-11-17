@@ -31,9 +31,11 @@ def render_text(result: AuditResult) -> str:
         f"Issues: {counts['error']} error(s), {counts['warning']} warning(s), "
         f"{counts['notice']} notice(s)"
     )
+    if result.baseline is not None:
+        lines.append(_baseline_line(result))
     if not result.issues:
         lines.append("")
-        lines.append("No issues found.")
+        lines.append("No new issues found." if result.baseline is not None else "No issues found.")
         return "\n".join(lines) + "\n"
 
     grouped: Dict[str, List[Issue]] = defaultdict(list)
@@ -54,3 +56,12 @@ def render_text(result: AuditResult) -> str:
     for rule, count in sorted(stats["issues_by_rule"].items(), key=lambda kv: (-kv[1], kv[0])):
         lines.append(f"  {rule.ljust(width)}  {count}")
     return "\n".join(lines) + "\n"
+
+
+def _baseline_line(result: AuditResult) -> str:
+    comparison = result.baseline
+    assert comparison is not None
+    return (
+        f"Baseline: {len(comparison.new)} new, {len(comparison.known)} known (hidden), "
+        f"{len(comparison.fixed)} fixed since the baseline"
+    )

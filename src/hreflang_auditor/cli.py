@@ -15,6 +15,7 @@ from . import codes
 from . import rules as R
 from ._version import __version__
 from .auditor import AuditConfig, audit
+from .baseline import Baseline, BaselineError
 from .crawler import DEFAULT_USER_AGENT, CrawlConfig
 from .langtag import parse_hreflang
 from .models import Severity
@@ -100,6 +101,14 @@ def build_parser() -> argparse.ArgumentParser:
                    help="hide issues below this level (default notice)")
     a.add_argument("--fail-on", choices=["error", "warning", "notice", "never"], default="error",
                    help="exit with status 1 if an issue at or above this level exists")
+    a.add_argument("--baseline", metavar="PATH",
+                   help="hide issues recorded in this baseline (or JSON report); only new "
+                        "issues are reported and count for --fail-on")
+    a.add_argument("--write-baseline", metavar="PATH",
+                   help="save the issues found by this run as a baseline file")
+    a.add_argument("--fail-on-fixed", action="store_true",
+                   help="with --baseline: also exit 1 when baseline issues are fixed, "
+                        "so the baseline file gets refreshed")
     a.add_argument("-q", "--quiet", action="store_true", help="no progress output on stderr")
 
     c = sub.add_parser("check", help="validate hreflang values without crawling")
@@ -147,6 +156,17 @@ def _cmd_audit(args: argparse.Namespace, transport: Optional[httpx.AsyncBaseTran
         print(f"error: not an absolute http(s) URL: {bad[0]}", file=sys.stderr)
         return EXIT_USAGE
 
+    if args.fail_on_fixed and not args.baseline:
+        print("error: --fail-on-fixed needs --baseline", file=sys.stderr)
+        return EXIT_USAGE
+    baseline: Optional[Baseline] = None
+    if args.baseline:
+        try:
+            baseline = Baseline.load(args.baseline)
+        except BaselineError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return EXIT_USAGE
+
     allowed = None
     if args.same_host:
         allowed = {host(u) for u in urls + args.sitemap}
@@ -186,6 +206,13 @@ def _cmd_audit(args: argparse.Namespace, transport: Optional[httpx.AsyncBaseTran
     result = asyncio.run(
         audit(urls, args.sitemap, args.sitemap_file, config=config, transport=transport)
     )
+    if args.write_baseline:
+        Baseline.from_issues(result.issues).save(args.write_baseline)
+        if not args.quiet:
+            print(f"Baseline with {len(result.issues)} issue(s) written to {args.write_baseline}",
+                  file=sys.stderr)
+    if baseline is not None:
+        result.apply_baseline(baseline)
     report = render(result, args.format)
     if args.output:
         Path(args.output).write_text(report, encoding="utf-8")
@@ -200,7 +227,15 @@ def _cmd_audit(args: argparse.Namespace, transport: Optional[httpx.AsyncBaseTran
         c = result.counts
         print(f"{c['error']} error(s), {c['warning']} warning(s), {c['notice']} notice(s)",
               file=sys.stderr)
+    if not args.quiet and result.baseline is not None:
+        print(
+            f"Baseline: {len(result.baseline.new)} new, {len(result.baseline.known)} known, "
+            f"{len(result.baseline.fixed)} fixed",
+            file=sys.stderr,
+        )
     if args.fail_on != "never" and result.has_at_least(Severity.parse(args.fail_on)):
+        return EXIT_ISSUES
+    if args.fail_on_fixed and result.baseline is not None and result.baseline.fixed:
         return EXIT_ISSUES
     return EXIT_OK
 
