@@ -1,4 +1,4 @@
-"""Command line interface: ``hreflang-auditor audit|check|rules``."""
+"""Command line interface: ``hreflang-auditor audit|check|generate|rules``."""
 
 from __future__ import annotations
 
@@ -17,6 +17,9 @@ from ._version import __version__
 from .auditor import AuditConfig, audit
 from .baseline import Baseline, BaselineError
 from .crawler import DEFAULT_USER_AGENT, CrawlConfig
+from .generate import FORMATS as GENERATE_FORMATS
+from .generate import RENDERERS as GENERATE_RENDERERS
+from .generate import MappingError, parse_mapping
 from .langtag import parse_hreflang
 from .models import Severity
 from .reports import RENDERERS, render, render_annotations_csv
@@ -114,6 +117,15 @@ def build_parser() -> argparse.ArgumentParser:
     c = sub.add_parser("check", help="validate hreflang values without crawling")
     c.add_argument("values", nargs="+", help="hreflang values, e.g. en-uk de-DE x-default")
     c.add_argument("--json", action="store_true", help="print JSON")
+
+    g = sub.add_parser("generate",
+                       help="write an hreflang sitemap, HTML tags or Link headers from a CSV mapping")
+    g.add_argument("mapping",
+                   help="CSV file ('-' for stdin): group,hreflang,url or one column per hreflang value")
+    g.add_argument("-f", "--format", choices=GENERATE_FORMATS, default="sitemap")
+    g.add_argument("-o", "--output", metavar="PATH", help="write here instead of stdout")
+    g.add_argument("--x-default", metavar="VALUE",
+                   help="add x-default pointing at this value's URL in groups that have none, e.g. en")
 
     r = sub.add_parser("rules", help="list every rule with its default severity")
     r.add_argument("--json", action="store_true", help="print JSON")
@@ -278,6 +290,28 @@ def _cmd_check(args: argparse.Namespace) -> int:
     return EXIT_ISSUES if worst_invalid else EXIT_OK
 
 
+def _cmd_generate(args: argparse.Namespace) -> int:
+    try:
+        text = sys.stdin.read() if args.mapping == "-" else Path(args.mapping).read_text("utf-8")
+        mapping = parse_mapping(text, args.x_default)
+    except (OSError, UnicodeDecodeError, MappingError) as exc:
+        print(f"hreflang-auditor: {exc}", file=sys.stderr)
+        return EXIT_USAGE
+    for problem in mapping.problems:
+        print(problem, file=sys.stderr)
+    if mapping.errors:
+        print(f"{len(mapping.errors)} error(s); nothing was written", file=sys.stderr)
+        return EXIT_ISSUES
+    output = GENERATE_RENDERERS[args.format](mapping)
+    if args.output:
+        Path(args.output).write_text(output, encoding="utf-8")
+        pages = sum(len(c.urls()) for c in mapping.clusters)
+        print(f"wrote {args.output}: {pages} page(s) in {len(mapping.clusters)} group(s)", file=sys.stderr)
+    else:
+        sys.stdout.write(output)
+    return EXIT_OK
+
+
 def _cmd_rules(args: argparse.Namespace) -> int:
     rules = R.all_rules()
     if args.json:
@@ -306,5 +340,7 @@ def main(
         return _cmd_check(args)
     if args.command == "rules":
         return _cmd_rules(args)
+    if args.command == "generate":
+        return _cmd_generate(args)
     parser.print_help()
     return EXIT_USAGE

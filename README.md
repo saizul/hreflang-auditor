@@ -61,6 +61,9 @@ A full sample is in [`examples/sample-report.txt`](examples/sample-report.txt) a
   colour-coded URL x language matrix per cluster and a filterable issue list.
 - **CI friendly.** `--fail-on` controls the exit code, every rule can be disabled
   or re-levelled, and the package has a Python API.
+- **Generator.** `generate` turns a CSV mapping of your page versions into a
+  sitemap with `xhtml:link` alternates, `<link>` tags per page or `Link` headers,
+  after validating every value and URL, so the output is correct by construction.
 - **Baselines.** Record the issues a site already has with `--write-baseline` and
   pass `--baseline` on later runs: only new issues are reported and fail the
   build, and issues fixed since the baseline are listed.
@@ -200,6 +203,40 @@ ok      x-default -> x-default (fallback for unmatched languages)
 ```
 
 `check` exits with 1 if any value is invalid; add `--json` for machine output.
+
+### Generate annotations from a mapping
+
+Keep the versions of each page in a spreadsheet and let the tool write the
+annotations. Two CSV layouts are accepted (comma, semicolon or tab separated):
+
+```text
+page,en-GB,en-US,de-DE,fr                        group,hreflang,url
+home,https://example.com/en-gb/,...              home,en-GB,https://example.com/en-gb/
+pricing,https://example.com/en-gb/pricing/,...   home,de-DE,https://example.com/de/
+```
+
+In the wide layout (left) each row is one set of alternates and each column an
+hreflang value; empty cells are skipped. In the long layout (right) rows with the
+same `group` belong together. See [`examples/hreflang-map.csv`](examples/hreflang-map.csv).
+
+```console
+$ hreflang-auditor generate examples/hreflang-map.csv -o sitemap-hreflang.xml --x-default en-GB
+wrote sitemap-hreflang.xml: 11 page(s) in 3 group(s)
+$ hreflang-auditor generate examples/hreflang-map.csv -f html      # <link> tags per page
+$ hreflang-auditor generate examples/hreflang-map.csv -f headers   # HTTP Link headers (PDFs)
+$ hreflang-auditor generate examples/hreflang-map.csv -f json      # {url: [{hreflang, href}]}
+```
+
+Every page gets the complete set, itself included, so return links and
+self-references are always right. Values are written in conventional case
+(`en-gb` becomes `en-GB`). `--x-default VALUE` adds an x-default that points
+at that value's URL in every group without one.
+
+Before anything is written, the mapping is checked: invalid values (`en-uk`,
+`jp`, ...), relative or non-http(s) URLs, two URLs for one value in a group, and
+a URL that appears in two groups are errors, reported with their line number;
+the command then exits with 1 and writes nothing. Groups with a single URL and
+more than 50,000 URLs (the sitemap limit) are warnings.
 
 ### List the rules
 

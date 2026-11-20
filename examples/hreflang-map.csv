@@ -1,0 +1,4 @@
+page,en-GB,en-US,de-DE,fr
+home,https://example.com/en-gb/,https://example.com/en-us/,https://example.com/de/,https://example.com/fr/
+pricing,https://example.com/en-gb/pricing/,https://example.com/en-us/pricing/,https://example.com/de/preise/,https://example.com/fr/tarifs/
+contact,https://example.com/en-gb/contact/,https://example.com/en-us/contact/,https://example.com/de/kontakt/,

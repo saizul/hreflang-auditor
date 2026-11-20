@@ -42,6 +42,7 @@ jobs:
           hreflang-auditor --version
           hreflang-auditor check en-GB x-default
           hreflang-auditor rules > /dev/null
+          hreflang-auditor generate examples/hreflang-map.csv --x-default en-GB > /dev/null
 
   package:
     runs-on: ubuntu-latest
