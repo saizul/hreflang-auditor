@@ -8,6 +8,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `generate MAPPING` writes hreflang annotations from a CSV mapping of page
+  versions: a sitemap with `xhtml:link` alternates (default), `<link>` tags per
+  page (`-f html`), HTTP `Link` headers (`-f headers`) or JSON. Accepts a wide
+  layout (one column per hreflang value) or a long `group,hreflang,url` layout,
+  comma, semicolon or tab separated. Every page gets the full set including
+  itself, values are written in conventional case, and `--x-default VALUE` adds
+  missing x-default entries. Invalid values, relative URLs, conflicting URLs for
+  one value and pages in two groups are reported with line numbers and nothing
+  is written (exit code 1).
+- `examples/hreflang-map.csv`.
 - Baselines for gradual adoption in CI. `audit --write-baseline PATH` records
   the issues of a run; `audit --baseline PATH` hides those known issues so only
   new ones are reported and count for `--fail-on`. Issues are matched by rule,
